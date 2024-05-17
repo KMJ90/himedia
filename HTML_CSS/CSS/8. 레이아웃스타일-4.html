@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>레이아웃스타일4</title>
+<style>
+.item {
+background-color : lightblue;
+color : white;
+margin : 10px;
+padding : 10px;
+}
+.container {
+/* 부모 요소의 display : flex; 추가 시 수평 정렬.
+   수평 정렬하고 싶은 요소의 부모 요소에 display 속성을 flex로 설정한다 */
+display: flex;
+
+/* flex-direction : 배치 방향 */
+flex-direction: row-reverse;
+flex-direction: column;
+flex-direction: column-reverse;  /* reverse : 역방향 */
+flex-direction: row;  /* 행 */
+
+/* flex-wrap : 줄바꿈 */
+flex-wrap: nowrap;  /* 줄바꿈이 되지 않음 */
+flex-wrap: wrap-reverse;  /* 줄바꿈이 되고 역방향으로 */
+flex-wrap: wrap;  /* 줄바꿈이 됨 */
+
+/* justify-content : 수평 방향 맞춤 */
+justify-content: flex-end;  /* 뒤에서부터 정렬이 됨 */
+justify-content: center;  /* 가운데 정렬 */
+justify-content: space-between;  /* 사이사이의 간격을 알아서 화면에 맞게 여백을 줌 */
+justify-content: space-around;  /* 요소들의 둘레에 균일한 간격을 만들어줌 */
+justify-content: flex-start;  /* 앞에서부터 정렬이 됨 */
+
+/* vh는 뷰 포트의 높이 기준 단위 */
+height: 100vh;
+
+/* align-items : 수직 방향 맞춤 */
+align-items: flex-start;
+align-items: flex-end;
+align-items: center;
+align-items: stretch;
+}
+</style>
+</head>
+
+<body>
+<h1>flexbox로 수평 정렬</h1>
+<p>
+Flexible Box Layout Module의 의미로 이전에는 수평 정렬에 float 속성을 많이
+사용했다면, 최근에는 Flexbox를 많이 사용한다.
+</p>
+<div class="container">
+<div class="item">div 1</div>
+<div class="item">div 2</div>
+<div class="item">div 3</div>
+<div class="item">div 4</div>
+<div class="item">div 5</div>
+<div class="item">div 6</div>
+<div class="item">div 7</div>
+<div class="item">div 8</div>
+</div>
+</body>
+</html>
