@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        function formatName(user) {
+            return `${user.lastName} ${user.firstName}`;
+        }
+
+        const user = {
+            firstName: 'Panda',
+            lastName: 'Kwon'
+        };
+
+        const element = <h1>Hello, {formatName(user)}</h1>  // <- {} 중괄호 안에 자바스크립트 식 문법 사용 가능
+
+        ReactDOM.createRoot(document.getElementById('root')).render(element);
+
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        // state
+        // 컴포넌트 내부에서 바뀔 수 있는 값을 의미한다
+        // props 는 부모 컴포넌트가 설정하고 주는 읽기 전용(변경 불가) 값이지만,
+        // state 는 컴포넌트 내부에서 설정되는 값이다
+
+        // 클래스형 컴포넌트
+        class Counter extends React.Component {  // React.Component : 부모
+
+            // 생성자(기본적으로 내제되어 있어, 명시하지 않아도 됨)
+            constructor(props) {
+                // 부모 컴포넌트로부터 전달받은 props를 부모 클래스의 생성자에 전달하면서 컴포넌트를 생성한다
+                super(props);
+
+                // 초기화
+                this.state = {
+                    number: 0,
+                    test: 'hello'
+                };
+            }
+            
+            render() {  // 클래스형 컴포넌트에서 render 메소드는 필수로 있어야함
+
+                // const number = this.state.number;
+
+                // {number} : 구조 분해 할당
+                const {number} = this.state;
+
+                console.log(this.state);
+
+                return (
+                    <>
+                        <h1 style={ number < 0 ? {color: 'red'} : {color: 'blue'}}>Count: {number}</h1>
+                        <button onClick={() => this.setState({number: number -1})}>-1</button>
+                        <button onClick={() => this.setState({number: number +1})}>+1</button>
+                    </>  // {number} : JSX 문법 / {number: number -1} : 컴포넌트의 number 상태를 현재 값보다 1감소
+                         // 또다른 초기화 값인 test: 'hello'는 해당되는 기능이 없어서 그대로 출력 
+                         // () => : 화살표 함수로, 버튼이 클릭될 때 호출되는 함수
+                         // this.setState : React 컴포넌트의 상태(state)를 업데이트 하는 메소드 
+                );
+            }
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<Counter/>);
+
+    </script>
+    
+</body>
+</html>

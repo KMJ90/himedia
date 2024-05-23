@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        class EventComponent extends React.Component {
+
+            // state의 초기 상태를 message라는 변수로 빈 문자열로 초기화
+            state = {message: ''};
+
+            render() {
+
+                return (
+                    <>
+                        <h1>이벤트 핸들링</h1>
+                        <input 
+                            type="text"
+                            name="message"
+                            placeholder="텍스트를 입력하세요"
+                            // 입력 필드의 값이 변경될 때마다 호출되는 이벤트 핸들러
+                            onChange= {
+                                (e) => {
+                                    // console.log(e.target.value)}
+                                    // 상태의 변화를 감지함
+                                    this.setState({message: e.target.value}); // e.target.value 를 message 상태에 업데이트 함
+                                }
+                            }
+                            // 입력 필드의 값을 컴포넌트의 상태 값으로 설정
+                            value = {this.state.message}  // <input valur : 기본값(초기값) / 입력 받은 값을 기본값으로 대입           
+                        />
+                        <button onClick= {
+                            () => {
+                                alert(`${this.state.message}`);  // message의 상태 값을 alert에 표시
+                                this.setState({message: ''});  // message 상태를 빈 문자열로 초기화
+                            }
+                        }>
+                            확인    
+                        </button>
+                    </>
+                )
+            }
+        }
+
+        // ReactDOM.createRoot 를 사용하여 root DOM 요소에 EventComponent 컴포넌트를 렌더링 함
+        ReactDOM.createRoot(document.getElementById('root')).render(<EventComponent/>);
+
+    </script>
+    
+</body>
+</html>

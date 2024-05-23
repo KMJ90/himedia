@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+    // 컴포넌트 합성의 코드를 참조하되 props를 활용하여 화면에 렌더링 해보기
+
+    // 사용자 정보 객체 정의
+    const user = {
+        name : '판다',
+        age : 20,
+        phone : '010-1234-5678',
+        email : 'panda@gmail.com'
+    };
+
+    const user2 = {
+        name : '다람쥐',
+        age : 16,
+        phone : '010-9876-5432',
+        email : 'squirrel@gmail.com'
+    };
+
+    const user3 = {
+        name : '코알라',
+        age : 30,
+        phone : '010-5555-3333',
+        email : 'koala@gmail.com'
+    };
+
+    // (개별) 정보 컴포넌트 정의
+    // NameCard, AgeCard, PhoneCard, EmailCard 컴포넌트는 
+    // 각각 name, age, phone, email을 받아서 화면에 표시
+    function NameCard({name}) {
+        return <h1>{name}</h1>;
+    }
+
+    function AgeCard({age}) {
+        return <h2 style={{color: 'orange'}}>{age}</h2>
+    }
+
+    function PhoneCard({phone}) {
+        return <h3 style={{backgroundColor: 'yellow'}}>{phone}</h3>
+    }
+
+    function EmailCard({email}) {
+        return <h3 style={{color: 'red'}}>{email}</h3>
+    } 
+
+
+    // UserInfo 컴포넌트 정의 (합성)
+    // user 객체를 props로 받아서, 각 개별 정보 컴포넌트에 전달
+    function UserInfo({info}) {  // <- {info} 는 판다만을 칭하는것이 아닌, 유저 3명 전체를 칭하는 변수명임
+        return (
+            // div 요소 내에서 각 개별 컴포넌트를 호출하여 사용자 정보 표시
+            <div style={{width: 300, border: '1px solid black'}}>
+                <NameCard name={info.name}/>  
+                <AgeCard age={info.age}/>
+                <PhoneCard phone={info.phone}/>
+                <EmailCard email={info.email}/>
+            </div>  // <NameCard name={info.name}/> : 여기에서 현재 info는 판다임, 아래 렌더링 과정에서 첫번째, 두번째, 세번째 순서대로 렌더링 되기 때문에 , 
+                    // 첫번째인 판다가 들어감, 두번째로는 다람쥐가 들어갈 예정
+        );
+    }
+
+    // UserInfo 컴포넌트를 각각 user, user2, user3 객체와 함께 호출하여 렌더링
+    // 렌더링이 되는 순서는 첫번째 user, 두번째 user2, 세번째 user3 순서로 렌더링 되지만 , 
+    // 코드 전체가 실행이 되어야 화면에 출력이 되기 때문에 , 빠른속도로 렌더링이 끝나, 화면에는 동시에 출력된다.
+    ReactDOM.createRoot(document.getElementById('root')).render(
+        [
+            <UserInfo info={user}/>,
+            <UserInfo info={user2}/>,
+            <UserInfo info={user3}/>
+        ]  // <UserInfo info={user}/>, : 여기에서 info 는 props 임
+    );
+
+    </script>
+</body>
+</html>
