@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <!-- useEffect() => -> 마운트, 업데이트
+         useEffect() => [] -> 마운트
+         useEffect() => [state] -> 마운트, 업데이트 -->
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const {useState, useEffect} = React;
+
+        function Timer() {
+
+            // useEffect를 사용하여 컴포넌트가 마운트될 때와 언마운트될 때 특정 동작을 수행
+            useEffect (
+                () => {
+                    console.log('타이머가 시작합니다.')
+                    // 마운트될 때 setInterval을 사용하여 1초마다 현재 시간을 콘솔에 출력하는 타이머를 시작
+                    const timer = setInterval (
+                        () => {console.log(new Date().toLocaleTimeString())}, 1000
+                    );
+
+                    return () => {
+                        // 언마운트될 때 clearInterval을 사용하여 타이머를 정리하고, 콘솔에 "타이머가 종료됩니다."라는 메시지를 출력
+                        clearInterval(timer);
+                        console.log('타이머가 종료됩니다.')
+                    }
+                }
+            )
+            // 컴포넌트는 "타이머를 시작합니다"라는 메시지를 화면에 표시
+            return (
+                <h1>타이머를 시작합니다</h1>
+            );
+        }
+
+        function App() {
+
+            // useState 훅을 사용하여 isTrue라는 상태 변수를 정의하고, 초기값을 false로 설정
+            const [isTrue, setIsTrue] = useState(false);
+
+            // 버튼을 클릭할 때마다 isTrue 값을 토글합니다 (true면 false로, false면 true로 변경)
+            // isTrue가 true일 때만 Timer 컴포넌트를 렌더링하여 타이머를 시작하고, 
+            // false일 때는 Timer 컴포넌트를 언마운트하여 타이머를 정리합니다.
+            return (
+                <>
+                    <button onClick={() => setIsTrue(!isTrue)}>타이머 토글</button>
+                    { isTrue && <Timer/> }
+                </>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+    </script>
+    
+</body>
+</html>

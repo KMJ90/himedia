@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- <style>
+        body {
+            margin: 0;
+        }
+        .container {
+            background: skyblue;
+            width: 100%;
+            height: 100vh; /* 1vh는 화면의 높이 1% */
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            width: 100%;
+            height: 100px;
+            background: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .content {
+            flex-grow: 1;
+            background: lightgray;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .todo-list {
+            background: white;
+            width: 500px;
+            border: 1px solid black;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 50px;
+        }
+        .todo-list label {
+            margin: 20px;
+        }
+        .todo-list button {
+            border: none;
+            background: red;
+            border-radius: 10px;
+            color: white;
+        }
+        .append-list button {
+            background: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            height: 30px;
+        }
+        .footer {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            background: black;
+            color: white;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+    </style> -->
+        
+</head>
+
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const { useState } = React;
+
+        function ToDoList() {
+
+            // useState를 사용하며, 사용할 변수와 값 생성
+            const [ToDos, setToDo] = useState([
+                { key: 1, todo: '청소하기' },
+                { key: 2, todo: '빨래하기' },
+                { key: 3, todo: '설거지하기' }
+            ]);
+
+            // 가상의 DOM 메모리에 변수 생성
+            const [newToDo, setNewToDo] = useState('');
+
+            // ToDos : 현재 상태 값을 .map() 이용해서 ToDo라는 변수에 하나씩 저장 후, <div> 요소로 가공  
+            const todoList = ToDos.map(ToDo => <div key={ToDo.key}><input type="checkbox" checked={ToDo.completed} onChange={
+                () => toggleComplete(ToDo.key)}/>
+
+                {/* 완료 여부에 따라 텍스트에 스타일을 조정 */}
+                <span style={{ textDecoration: ToDo.completed ? 'line-through' : 'none'}}> {ToDo.todo} </span>
+
+                {/* 삭제 버튼 추가 및 클릭 이벤트 처리 */}
+                <button onClick={() => ToDoDelete(ToDo.key)}>❌</button></div>)
+
+            // 할 일 추가 함수
+            const ToDoAdd = () => {
+
+                // trim()으로 입력된 할 일 문자열의 양쪽 공백을 제거, 입력란에 문자를 입력했는지 확인
+                if (newToDo.trim() !== '') {
+
+                    // 새로운 할 일 객체 생성
+                    const newToDoObj = { key: Date.now(), todo: newToDo };
+
+                    // setToDo를 이용해서, 현재 할 일 목록(ToDos)에 사용자가 입력한 새로운 할 일(newToDo)을 추가
+                    setToDo([...ToDos, newToDoObj]);
+
+                    // 새로운 할 일을 추가한 후, 입력 필드를 비움
+                    setNewToDo('');
+                }
+            }
+
+            // 할 일 목록에서 완료 상태를 토글하는 함수
+            // key 값을 매개변수로 받아 해당하는 할 일 항목의 완료 상태를 토글함
+            const toggleComplete = (key) => {
+
+                setToDo(ToDos.map(ToDo => { 
+
+                    // 만약 현재 매핑 중인 항목의 key값이 함수에 전달된 key값과 일치하는 경우에만 실행
+                    if (ToDo.key === key) {
+
+                    // 일치하는 항목의 완료 상태를 토글합니다
+                    // completed 속성의 값을 반전시켜서 완료되었던 항목이 미완료로, 미완료였던 항목이 완료로 변경
+                    return {...ToDo, completed: !ToDo.completed};
+                }
+                // 일치하지 않는 항목은 변경되지 않은 채로 그대로 반환
+                return ToDo;
+            }));
+            }
+
+            // 할 일 삭제 함수
+            const ToDoDelete = (key) => {
+
+                // filter 함수를 사용하여, 선택된 할 일을 제외한 나머지 할 일들로 새로운 배열 생성
+                const updatedToDos = ToDos.filter(todo => todo.key !== key);
+
+                // setToDo를 이용해 업데이트된 할 일 목록을 설정
+                setToDo(updatedToDos);
+            }
+
+            return (
+                <>
+                    <h1>오늘의 할일! {new Date().toLocaleDateString()}</h1>
+                    <h3>ToDo-List</h3>
+                    <div>
+                        {todoList}
+                    </div>
+                    <input
+                        type="text"
+                        value={newToDo}
+                        onChange={(e) => setNewToDo(e.target.value)}
+                        placeholder="새 할 일 입력"
+                    />
+                    <button onClick={ToDoAdd}>추가</button>
+                </>
+            );
+        }
+        ReactDOM.createRoot(document.getElementById('root')).render(<ToDoList />);
+
+    </script>
+
+</body>
+
+</html>
