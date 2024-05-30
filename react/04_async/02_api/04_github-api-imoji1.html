@@ -25,7 +25,7 @@
          * 일치하는 값이 없을 경우 img를 랜더링하지 않는다.
         */
 
-        function SearxhBox({onSearch}) {
+        function SearxhBox({setSearchInfo}) { 
 
             const [inputValue, setInputValue] = useState('');  // 입력값 관리
 
@@ -36,7 +36,7 @@
             const onClickHandler = () => {
                 axios.get(' https://api.github.com/emojis')
                     .then(res => res.data)
-                    .then(url => url[inputValue])
+                    .then(data => setSearchInfo(data[inputValue]))
             }
 
             return (
@@ -46,6 +46,7 @@
                         name="emojiName"
                         value={inputValue}
                         onChange={onChangeHandler}
+                        placeholder="이모지 이름을 입력하세요."
                     />
                     <button onClick={onClickHandler}>검색</button>
                 </>
@@ -54,19 +55,20 @@
 
         function ImageBox({emojiUrl}) {
 
-            const [emojiUrl, setEmojiUrl] = useState('');
-
             return (
-                <img/>
+                <img src={emojiUrl}/>
             );
         }
 
         function App() {
+
+            const [searchInfo, setSearchInfo] = useState('');
+
             return (
                 <>
-                    <SearxhBox/>
+                    <SearxhBox setSearchInfo={setSearchInfo}/>
                     <br/>
-                    <ImageBox/>
+                    <ImageBox emojiUrl={searchInfo}/>
                 </>
             );
         }

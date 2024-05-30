@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        .card {
+            border: 1px solid black;
+            width: 300px;
+            margin: 10px;
+            padding: 20px;
+            display: inline-block;
+        }
+
+        .card>* {
+            display: inline-block;
+        }
+
+        .card>img {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        // React의 useState와 useEffect 훅 가져옴
+        const {useState, useEffect} = React;
+
+        function Title() {
+            return (
+                <h1>포켓몬 목록</h1>
+            );
+        }
+
+        function PokemonList() {
+
+            //전체 포켓몬 목록에 대한 api 요청
+            //https://pokeapi.co/api/v2/pokemon
+            // 포켓몬 목록을 저장할 상태 변수
+            const [pokemons, setPokemons] = useState([]);
+
+            // 컴포넌트가 처음 렌더링될 때 API 요청
+            useEffect(() => {
+                fetch('https://pokeapi.co/api/v2/pokemon')
+                    .then(response => response.json())  // json타입으로 변환
+                    .then(data => setPokemons(data.results))  // 데이터를 받아와 상태에 저장
+                    .catch(error => console.log('Error:', error));
+            }, []  // 빈 배열을 두 번째 인자로 전달하여 한 번만 실행되도록 설정
+            );
+
+            return (
+                <>
+                    {/* 포켓몬 목록을 순회하며 Card 컴포넌트를 렌더링 */}
+                    {pokemons && pokemons.map(pokemon => (
+                        <Card key={pokemon.name} url={pokemon.url}/>
+                    ))}
+                </>
+            )
+        }
+
+        function Card({url}) {
+
+            // 한 포켓몬의 이미지 주소 요청 (이전 api 요청의 결과의 url 속성으로 존재함)
+            // EX. https://pokeapi.co/api/v2/pokemon/1
+            // sprites.back_default 속성 이미지 사용
+
+            // 포켓몬 데이터를 저장할 상태 변수
+            const [data, setData] = useState(null);
+
+            // url이 변경될 때마다 해당 포켓몬 데이터를 가져옴
+            useEffect(() => {
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => setData(data))  // 데이터를 받아와 상태에 저장
+                    .catch(error => console.error('Error:', error));
+            }, [url]  // url이 변경될 때마다 이 효과를 실행
+            );
+
+            return (
+                <div className="card">
+                    {data && (  // data && : data가 참이면(null 또는 undefined가 아니면) 오른쪽 코드를 실행
+                                // 데이터가 로드되면 카드에 포켓몬 이미지와 정보를 표시
+                        <>
+                            <img src={data.sprites.back_default} alt={data.name} />
+                            <div className="info">
+                                <h2>No. : {data.id}</h2>
+                                <h3>name : {data.name}</h3>
+                            </div>
+                        </>
+                    )}
+              </div>
+            );
+        }
+
+        function App() {
+            return (
+                <>
+                    <Title />
+                    <PokemonList />
+                </>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,24 +9,62 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
+
 <body>
 
     <div id="root"></div>
 
     <script type="text/babel">
 
-        const {useState, useEffect} = React;
+        const API_KEY = '376022b4c53b8b7345ea37b43d36966e'
+
+        const { useState, useEffect } = React;
 
         function Weather() {
 
+            const [position, setPosition] = useState({});
+            const [cityname, setCityname] = useState('');
+            const [weather, setWeather] = useState({});
+            const [wind, setWind] = useState({});
+
             useEffect(
                 () => {
-                    navigator.geolocation
-                })
+                    new Promise((resolve) => {  // 1. 먼저 수행됨
+
+                        // 위도 경도 알아오기
+                        navigator.geolocation.getCurrentPosition(
+
+                            currentPosition => {
+                                console.log(currentPosition);
+
+                                setPosition({
+                                    latitude: currentPosition.coords.latitude,  // 위도
+                                    longitude: currentPosition.coords.longitude  // 경도
+                                });
+                                resolve(currentPosition.coords);
+                            }
+                        )
+                    }).then(coords => {  // 1 번이 수행된 후, 2번으로 수행됨
+
+                        // 날씨 API 요청하기
+                        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${coords.latitude}&lon=${coords.longitude}&appid=${API_KEY}`)
+                            .then(response => response.json())
+                            .then(json => {
+                                console.log(json);
+                                setCityname(json.name);
+                                setWeather(json.weather[0]);
+                            });
+                    })
+                }, []
+            )
 
             return (
                 <div>
-                    <h1>현재 위치</h1>    
+                    <h1>현재 위치</h1>
+                    <h4>{`위도 : ${position.latitude} 경도 : ${position.longitude}`}</h4>
+                    <h4>{`조회 도시 : ${cityname}`}</h4>
+                    <h4>{`날씨 : ${weather.main} 설명 : ${weather.description}`}</h4>
+                    <h4>{`풍향 : ${wind.deg} 풍속 : ${wind.speed}`}</h4>
                 </div>
             );
         }
@@ -35,14 +74,15 @@
             return (
                 <>
                     <h1>오늘의 날씨</h1>
-                        <Weather/>
+                    <Weather />
                 </>
             );
         }
 
-        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 
     </script>
-    
+
 </body>
+
 </html>
