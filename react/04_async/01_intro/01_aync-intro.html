@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        function sayHello() {
+            console.log('Hello World!')
+        }
+
+        sayHello();
+        console.log('end');  // 동기 : 'Hello World!' 먼저 출력됨
+
+        setTimeout(sayHello, 3000);  // 콜백 함수
+        console.log('end');  // 비동기 : 'end' 먼저 출력됨
+
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        /* Promise를 더 쉽게 사용할 수 있도록 async await 가 ES2017(ES8)부터 추가되었다 */
+        function increase(number) {
+            
+            const promise = new Promise((resolve, reject) => {  // resolve : 성공 / reject : 실패
+
+                setTimeout (
+                    () => {
+                        const result = number + 10;
+
+                        if (result > 50) {  // 오류 조건
+                            const e = new Error('NumberTooBig');  // NumberTooBig이라는 메세지를 가진 에러 객체 생성하고 e라는 상수에 저장 
+
+                            return reject(e);  // Promise를 실패 상태로 만들고, 에러 객체 e 를 그 이유로 전달하여 비동기 작업이 실패했음을 나타냄
+                        }
+                        
+                        resolve(result);
+                    }, 1000
+                )
+            });
+            return promise;
+        }
+
+        // fetch 는 Promise 와 비슷하게 (.then / async, await) 사용 가능
+        async function run() {
+
+        // try 블록을 순차적으로 실행하며, 성공하면, 결과 값을 콘솔에 출력 / 실패하면 catch 블록으로 이동하여 오류 처리
+        try {
+
+            let result = await increase(0);
+            console.log(result);
+            
+            result = await increase(result);
+            console.log(result);
+
+            result = await increase(result);
+            console.log(result);
+
+            result = await increase(result);
+            console.log(result);
+
+            result = await increase(result);
+            console.log(result);
+
+            result = await increase(result);
+            console.log(result);
+
+        } catch(e) {
+        console.log(e);
+        }
+    }
+    
+    run();
+
+    </script>
+    
+</body>
+</html>

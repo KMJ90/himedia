@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+    <!-- 검색 버튼을 클릭시 비동기 실행 -->
+    
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const {useState} = React;
+
+        /* 요청 주소 : https://api.github.com/emojis 
+         * useState, props, event, 비동기 통신 이용해서 입력 된 값과 일치하는 emoji를 img에 보여주는 프로그램 작성
+         * 일치하는 값이 없을 경우 img를 랜더링하지 않는다.
+        */
+
+        function SearxhBox({onSearch}) {
+
+            const [inputValue, setInputValue] = useState('');  // 입력값 관리
+
+            const onChangeHandler = (e) => {  // 상태가 변경 되었을 때 실행
+                setInputValue(e.target.value);  // 입력한 값을 setInputValue 통해 설정
+            }
+
+            const onClickHandler = () => {
+                axios.get(' https://api.github.com/emojis')
+                    .then(res => res.data)
+                    .then(url => url[inputValue])
+            }
+
+            return (
+                <>
+                    <input
+                        type="text"
+                        name="emojiName"
+                        value={inputValue}
+                        onChange={onChangeHandler}
+                    />
+                    <button onClick={onClickHandler}>검색</button>
+                </>
+            );
+        }
+
+        function ImageBox({emojiUrl}) {
+
+            const [emojiUrl, setEmojiUrl] = useState('');
+
+            return (
+                <img/>
+            );
+        }
+
+        function App() {
+            return (
+                <>
+                    <SearxhBox/>
+                    <br/>
+                    <ImageBox/>
+                </>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+    </script>
+</body>
+</html>

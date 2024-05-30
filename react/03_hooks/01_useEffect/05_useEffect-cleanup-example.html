@@ -9,9 +9,10 @@
     <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
-    <!-- useEffect() => -> 마운트, 업데이트
-         useEffect() => [] -> 마운트
-         useEffect() => [state] -> 마운트, 업데이트 -->
+    <!-- useEffect(func) => -> 마운트, 업데이트
+         useEffect(func, []) => -> 마운트
+         useEffect(func, [state]) => -> 마운트, 업데이트
+         useEffect(() => {return func} -> 언마운트 -->
 
     <div id="root"></div>
 

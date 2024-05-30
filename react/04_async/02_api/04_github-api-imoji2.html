@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    
+    <!-- 렌더링시에 조건문을 통헤 비동기 실행 -->
+    
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        /* 요청 주소 : https://api.github.com/emojis 
+         * useState, props, event, 비동기 통신 이용해서 입력 된 값과 일치하는 emoji를 img에 보여주는 프로그램 작성
+         * 일치하는 값이 없을 경우 img를 랜더링하지 않는다.
+        */
+
+        const {useState} = React;
+
+        // 검색 상자 컴포넌트
+        function SearxhBox({onSearch}) {
+
+            const [inputValue, setInputValue] = useState('');  // 입력 초기값을 공백으로 설정
+
+            const handlerInputChange = (e) => {  // 입력값이 변경될 때 호출되는 함수
+                setInputValue(e.target.value);
+            }
+
+            const handlerSearchClick = () => {  // 검색 버튼 클릭 시 호출되는 함수
+                onSearch(inputValue);  // 부모 컴포넌트(App())에 입력 값을 전달하여 검색 요청
+            }
+
+            return (
+                <>
+                    <input
+                        type="text"
+                        name="emojiName"
+                        value={inputValue}  // input 요소의 값을 inputValue 상태로 설정
+                        onChange={handlerInputChange}  // input 값이 변경될 때 handlerInputChange 호출
+                        placeholder="이모지 이름을 입력하세요."
+                    />
+                    <button onClick={handlerSearchClick}>검색</button> {/* 검색 버튼 클릭 시  handlerSearchClick 호출 */}
+                </>
+            );
+        }
+
+        // 이미지 상자 컴포넌트
+        function ImageBox({emojiUrl}) {
+
+            if (!emojiUrl) return null;  // emojiUrl 이 없으면 아무 것도 렌더링하지 않음
+
+            return (
+                <img src={emojiUrl} alt="emoji"/>  // emojiUrl 이 있으면 이미지를 렌더링
+            );
+        }
+
+        // 메인 앱 컴포넌트
+        function App() {
+
+            const [emojiUrl, setEmojiUrl] = useState(null);  // 이모지 URL을 관리하는 상태
+            const [emojis, setEmojis] = useState({});  // 이모지 데이터를 관리하는 상태
+
+            // 이모지 데이터를 가져오는 비동기 함수`
+            const fetchEmojis = async() => {
+                try {
+                    const response = await axios.get('https://api.github.com/emojis');
+                    setEmojis(response.data);  // 받아온 이모지 데이터를 상태에 설정
+                } catch (error) {
+                    console.log('Error fetching emojis', error);  // 에러 발생 시 콘솔에 출력
+                }
+            };
+
+            // 검색어에 해당하는 이모지를 찾아서 상태를 업데이트하는 함수
+            const handlerSearch = (emojiName) => {  // emojiName 을 매개변수로 받음
+                const foundEmoji = emojis[emojiName]; // 이모지 데이터에서 입력한 이름에 해당하는 이모지를 찾아서 foundEmoji에 저장
+
+                if (foundEmoji) {
+                    setEmojiUrl(foundEmoji);  // 이모지를 찾으면 해당 이모지 URL을 state에 설정
+                } else {
+                    setEmojiUrl(null);  // 이모지를 찾지 못하면 state를 null로 설정
+                }
+            }
+
+            // 이모지 데이터를 가져오는 비동기 함수 호출
+            // 조건을 걸어 컴포넌트가 처음 렌더링될 때 한 번만 실행되도록 함 
+            if (Object.keys(emojis).length === 0) {  // Object.keys(emojis).length : emojis 객체의 키 개수를 나타냄
+                                                     // (Object.keys(emojis).length === 0) : emojis 객체가 비어 있는지 확인
+
+                fetchEmojis();  // 조건이 참이면, fetchEmojis()를 호출하여, 이모지 데이터를 가져옴
+            }
+
+            return (
+                <>
+                    <h1>이모지 검색</h1>
+                    <SearxhBox onSearch={handlerSearch}/> {/* 검색 상자 컴포넌트 */}
+                    <br/>
+                    <ImageBox emojiUrl={emojiUrl}/> {/* 이미지 상자 컴포넌트 */}
+                </>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+    </script>
+</body>
+</html>
