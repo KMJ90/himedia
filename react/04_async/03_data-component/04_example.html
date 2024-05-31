@@ -93,7 +93,7 @@
                     {data && (  // data && : data가 참이면(null 또는 undefined가 아니면) 오른쪽 코드를 실행
                                 // 데이터가 로드되면 카드에 포켓몬 이미지와 정보를 표시
                         <>
-                            <img src={data.sprites.back_default} alt={data.name} />
+                            <img src={data.sprites.front_default}/>
                             <div className="info">
                                 <h2>No. : {data.id}</h2>
                                 <h3>name : {data.name}</h3>
@@ -113,7 +113,7 @@
             );
         }
 
-        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
     </script>
 </body>
 

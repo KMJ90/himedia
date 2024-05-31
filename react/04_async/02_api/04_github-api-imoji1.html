@@ -66,9 +66,10 @@
 
             return (
                 <>
-                    <SearxhBox setSearchInfo={setSearchInfo}/>
+                    <h1>이모지 검색</h1>
+                    <SearxhBox setSearchInfo={setSearchInfo}/>  {/* 앞의 setSearchInfo는 props임 */}
                     <br/>
-                    <ImageBox emojiUrl={searchInfo}/>
+                    <ImageBox emojiUrl={searchInfo}/>  {/* 앞의 emojiUrl은 props임 */}
                 </>
             );
         }
