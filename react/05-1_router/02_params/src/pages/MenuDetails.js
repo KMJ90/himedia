@@ -7,7 +7,7 @@ function MenuDetails() {
     // react-router-dom의 useParams라는 hook을 이용하여 path variable을 읽어올 수 있다
     // 구조 분해 할당하는 이름은 <Route>에 설정한 ":menuCode"로 설정 되어야 한다
 
-    const {menuCode} = useParams();
+    const {menuCode} = useParams();  // useParams : 객체 형태로 꺼내옴
 
     const [menu, setMenu] = useState();
 

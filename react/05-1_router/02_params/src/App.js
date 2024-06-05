@@ -5,6 +5,7 @@ import About from "./pages/About";
 import Menu from "./pages/Menu";
 import MenuDetails from "./pages/MenuDetails";
 import MenuSearchResult from "./pages/MenuSearchResult";
+import Error from "./pages/Error";
 
 
 // header와 navbar는 고정된 상태로 나머지는 변화시키기
@@ -22,6 +23,8 @@ function App() {
               <Route path="search" element={<MenuSearchResult />} />
             </Route>
           </Route>
+          {/* path="*" : 위에 정의된 것 이외에 정의되지 않은 모든 것 */}
+          <Route path="*" element={<Error/>} />
         </Routes>
       </BrowserRouter>
   );
