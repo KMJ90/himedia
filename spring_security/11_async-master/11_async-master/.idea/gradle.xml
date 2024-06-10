@@ -4,11 +4,11 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/11_async-master/async" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/async" />
         <option name="gradleJvm" value="#JAVA_HOME" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$/11_async-master/async" />
+            <option value="$PROJECT_DIR$/async" />
           </set>
         </option>
       </GradleProjectSettings>
