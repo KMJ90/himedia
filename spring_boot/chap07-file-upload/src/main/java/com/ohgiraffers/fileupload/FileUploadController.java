@@ -85,7 +85,7 @@ public class FileUploadController {
                 // 파일 저장
                 file.transferTo(new File(filePath + "/" + savedName));
             }
-            // 서버의 정해지 경로로 파일 저장이 완료 되면 List<FileDTO> 타입의 객체에 저장된 정보를 DB에 insert 한다
+            // 서버의 정해진 경로로 파일 저장이 완료 되면 List<FileDTO> 타입의 객체에 저장된 정보를 DB에 insert 한다
             model.addAttribute("message", "파일 업로드 완료");
 
         } catch (IOException e) {
